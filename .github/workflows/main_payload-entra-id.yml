@@ -26,7 +26,7 @@ jobs:
       - name: create .env
         run: |
           touch .env
-          echo DATABASE_URI=mongodb://payload-entra-id-server:bC5sELbKKxzOYutTddWGQQ8RdN6b3reTEnl5Z7A1JnPMm3rtJoeL0RZCyehGn0KoMDegwi55qCfCACDbBTdUzA==@payload-entra-id-server.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@payload-entra-id-server@ >> .env
+          echo DATABASE_URI=${{ secrets.DATABASE_URI }} >> .env
           echo PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} >> .env
           echo NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} >> .env
           echo CRON_SECRET=${{ secrets.CRON_SECRET }} >> .env
