@@ -26,8 +26,8 @@ jobs:
       - name: create .env
         run: |
           touch .env
-          echo DATABASE_URI=${{ secrets.DATABASE_URI }} >> .env
           echo PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }} >> .env
+          echo DATABASE_URI=${{ secrets.DATABASE_URI }} >> .env          
           echo NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} >> .env
           echo CRON_SECRET=${{ secrets.CRON_SECRET }} >> .env
           echo PREVIEW_SECRET=${{ secrets.PREVIEW_SECRET }} >> .env
