@@ -1,7 +1,7 @@
 # payload-entra-id
 
 ### 準備
-Entra IDのテナントを作成
+Entra IDのテナントを作成　
 記事を参考にアプリ登録
 
 ##### 参考記事
