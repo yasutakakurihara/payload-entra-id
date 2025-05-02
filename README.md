@@ -1,8 +1,8 @@
 # payload-entra-id
 
 ### 準備
-Entra IDのテナントを作成　
-記事を参考にアプリ登録
+- Entra IDのテナントを作成　
+- 記事を参考にアプリ登録
 
 ##### 参考記事
 Microsoft Entra ID × Next.jsで実装する認証機能（Auth.js + @azure/msal-node）
