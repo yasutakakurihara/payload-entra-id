@@ -10,7 +10,6 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
-import { Redirects } from './collections/Redirects'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -65,14 +64,15 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Redirects],
+  collections: [Pages, Posts, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
     authjsPlugin({
       authjsConfig: authConfig,
       userCollectionSlug: 'users',
-    }),    
+    }),
+    ...plugins,
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
