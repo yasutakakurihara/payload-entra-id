@@ -40,6 +40,19 @@ jobs:
 
       - name: Debug .env file
         run: cat .env
+
+      - name: Debug env creation
+        run: |
+          touch debug.env
+          echo "TEST_LINE=This is a test line" >> debug.env
+          echo "DATABASE_URI=${{ secrets.DATABASE_URI }}" >> debug.env
+          echo "PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}" >> debug.env
+          echo "---DEBUG FILE CONTENT---"
+          cat debug.env
+          echo "---DEBUG FILE LINE COUNT---"
+          wc -l debug.env
+          echo "---CHECK IF DATABASE_URI EXISTS---"
+          grep -c "DATABASE_URI" debug.env || echo "Not found"
   
       - name: npm install, build, and test
         run: |
