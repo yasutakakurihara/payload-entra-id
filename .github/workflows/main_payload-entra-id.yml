@@ -38,6 +38,11 @@ jobs:
           echo AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID =${{ secrets.AUTH_MICROSOFT_ENTRA_ID_CLIENT_ID }} >> .env
           echo AUTH_MICROSOFT_ENTRA_ID_SECRET =${{ secrets.AUTH_MICROSOFT_ENTRA_ID_SECRET }} >> .env
 
+      - name: Check if variables exist
+        run: |
+          source .env
+          if [ -n "$DATABASE_URI" ]; then echo "DATABASE_URI is set"; else echo "DATABASE_URI is not set"; fi
+    
       - name: npm install, build, and test
         run: |
           npm install
