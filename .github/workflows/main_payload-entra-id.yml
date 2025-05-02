@@ -53,7 +53,16 @@ jobs:
           wc -l debug.env
           echo "---CHECK IF DATABASE_URI EXISTS---"
           grep -c "DATABASE_URI" debug.env || echo "Not found"
-  
+
+      - name: Debug network connectivity
+        run: |
+          # 接続先ホストへのネットワーク接続をテスト
+          ping -c 4 payload-entra-id-server.mongo.cosmos.azure.com || echo "Ping failed but that's expected for CosmosDB"
+          # Telnetで10255ポートへの接続をテスト
+          nc -zv payload-entra-id-server.mongo.cosmos.azure.com 10255
+          # 外部IPアドレスを確認（これをAzureのファイアウォール許可リストに追加できます）
+          curl -s https://api.ipify.org
+    
       - name: npm install, build, and test
         run: |
           npm install
