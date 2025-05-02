@@ -388,6 +388,7 @@ export interface User {
     | null;
   updatedAt: string;
   createdAt: string;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
