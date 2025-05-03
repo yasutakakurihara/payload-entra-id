@@ -60,9 +60,11 @@ export async function syncUserWithPayload(user: SignInUser, profile?:Profile): P
           ],
           timestamps: true,
         }],
-        db: mongooseAdapter({
-          url: process.env.DATABASE_URI || '',
-        }),
+        db: (process.env.SKIP_DB_CONNECTION === 'true' 
+          ? undefined 
+          : mongooseAdapter({
+              url: process.env.DATABASE_URI || '',
+            })) as any,        
         secret: process.env.PAYLOAD_SECRET || '',
       }),
     })
