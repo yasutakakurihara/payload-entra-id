@@ -105,6 +105,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'payload-entra-id'
+          publish-profile: ${{ secrets.APP_PUBLISH_PROFILE }}
           slot-name: 'Production'
           package: '.'  # ビルド済みの成果物のみ
           startup-command: 'npm start'          
