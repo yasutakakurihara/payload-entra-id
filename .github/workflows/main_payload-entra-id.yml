@@ -108,4 +108,4 @@ jobs:
           publish-profile: ${{ secrets.APPLICATION_PUBLISH_PROFILE }}
           slot-name: 'Production'
           package: '.'  # ビルド済みの成果物のみ
-          startup-command: 'npm start'          
+          startup-command: 'npm run start'          
