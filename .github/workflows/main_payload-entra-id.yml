@@ -58,14 +58,7 @@ jobs:
           nc -zv payload-entra-id-server.mongo.cosmos.azure.com 10255
           # 外部IPアドレスを確認（これをAzureのファイアウォール許可リストに追加できます）
           curl -s https://api.ipify.org
-    
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7EDF5836BD294C0182F3A46120AD253C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E82D9FECEB404EDD85AB41851317036D }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F54FCA572DC74BE8A4E4CBAD2DDD50B7 }}
-          
+              
       - name: npm install, build, and test
         run: |
           npm install
@@ -113,5 +106,5 @@ jobs:
         with:
           app-name: 'payload-entra-id'
           slot-name: 'Production'
-          package: .
-          
+          package: dist  # ビルド済みの成果物のみ
+          startup-command: 'npm start'          
