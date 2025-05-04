@@ -65,49 +65,12 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7EDF5836BD294C0182F3A46120AD253C }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E82D9FECEB404EDD85AB41851317036D }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F54FCA572DC74BE8A4E4CBAD2DDD50B7 }}
-
-      - name: Get GitHub Actions IP address
-        id: get-ip
-        run: |
-          IP_ADDRESS=$(curl -s https://checkip.amazonaws.com)
-          echo "ip=$IP_ADDRESS" >> $GITHUB_OUTPUT
-          echo "GitHub Actions IP: $IP_ADDRESS"
-
-      - name: Add IP to Cosmos DB firewall
-        id: add-ip
-        run: |
-          az cosmosdb update \
-            --resource-group ${{ env.COSMOS_RESOURCE_GROUP }} \
-            --name ${{ env.COSMOS_ACCOUNT_NAME }} \
-            --ip-range-filter "${{ steps.get-ip.outputs.ip }}"
-          
-          # Wait for firewall rule to be applied
-          echo "Waiting for firewall rule to be applied..."
-          sleep 30
           
       - name: npm install, build, and test
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
-
-      - name: Remove IP from Cosmos DB firewall
-        if: always()
-        run: |
-          CURRENT_IPS=$(az cosmosdb show \
-            --resource-group ${{ env.COSMOS_RESOURCE_GROUP }} \
-            --name ${{ env.COSMOS_ACCOUNT_NAME }} \
-            --query "ipRules" -o tsv)
-          
-          # Remove the current IP from the list
-          UPDATED_IPS=$(echo "$CURRENT_IPS" | grep -v "${{ steps.get-ip.outputs.ip }}" || true)
-          
-          az cosmosdb update \
-            --resource-group ${{ env.COSMOS_RESOURCE_GROUP }} \
-            --name ${{ env.COSMOS_ACCOUNT_NAME }} \
-            --ip-range-filter "$UPDATED_IPS"
-          
-          echo "IP ${{ steps.get-ip.outputs.ip }} removed from firewall"
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
