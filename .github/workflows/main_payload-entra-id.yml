@@ -106,5 +106,5 @@ jobs:
         with:
           app-name: 'payload-entra-id'
           slot-name: 'Production'
-          package: dist  # ビルド済みの成果物のみ
+          package: '.'  # ビルド済みの成果物のみ
           startup-command: 'npm start'          
