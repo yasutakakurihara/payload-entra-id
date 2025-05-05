@@ -107,5 +107,3 @@ jobs:
           app-name: 'payload-entra-id'
           publish-profile: ${{ secrets.APPLICATION_PUBLISH_PROFILE }}
           slot-name: 'Production'
-          package: '.'  # ビルド済みの成果物のみ
-          startup-command: 'npm run start'          
