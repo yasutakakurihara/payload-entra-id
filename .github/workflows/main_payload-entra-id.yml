@@ -59,22 +59,47 @@ jobs:
           # 外部IPアドレスを確認（これをAzureのファイアウォール許可リストに追加できます）
           curl -s https://api.ipify.org              
 
-      - name: Cache Next.js build outputs
-        uses: actions/cache@v3
-        with:
-          path: |
-            .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NODE_ENV: production
 
-      - name: Install Dependencies and Build
+      - name: List .next directory contents
+        run: ls -la .next
+
+      - name: Verify standalone directory exists
         run: |
-          npm install
-          npm run build
+          if [ -d ".next/standalone" ]; then
+            echo "Standalone directory exists"
+            ls -la .next/standalone
+          else
+            echo "ERROR: Standalone directory does not exist!"
+            echo "Checking if next.config.js is correctly configured with output: 'standalone'"
+            exit 1
+          fi
+
+      - name: Prepare standalone build for deployment
+        run: |
           # 静的ファイルをstandaloneディレクトリに移動
-          cp -r .next/static .next/standalone/.next/
-          cp -r public .next/standalone/
-          # server.jsファイルが確実に存在するか確認
+          cp -r .next/static .next/standalone/.next/ || echo "Failed to copy static files"
+          cp -r public .next/standalone/ || echo "Failed to copy public files"
+          
+          # 内容確認
+          echo "Contents of .next/standalone:"
           ls -la .next/standalone/
+          echo "Contents of .next/standalone/.next/ (if exists):"
+          ls -la .next/standalone/.next/ || echo "Directory not found"
+
+      - name: Package app for deployment
+        run: |
+          cd .next/standalone
+          zip -r ../../standalone.zip .
+          cd ../..
+          echo "Created standalone.zip package:"
+          ls -la standalone.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -101,4 +126,4 @@ jobs:
           app-name: 'payload-entra-id'
           publish-profile: ${{ secrets.APPLICATION_PUBLISH_PROFILE }}
           slot-name: 'Production'
-          package: .next/standalone
+          package: ./standalone.zip
