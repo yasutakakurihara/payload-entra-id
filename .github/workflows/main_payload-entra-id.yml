@@ -68,14 +68,14 @@ jobs:
 
       - name: Install Dependencies and Build
         run: |
-          npm ci
+          npm install
           npm run build
           # 静的ファイルをstandaloneディレクトリに移動
           cp -r .next/static .next/standalone/.next/
           cp -r public .next/standalone/
           # server.jsファイルが確実に存在するか確認
           ls -la .next/standalone/
-          
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
